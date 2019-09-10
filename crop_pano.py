@@ -1,16 +1,17 @@
 import sys
 import subprocess
+import math
 
-num_parts = 8
-
-w = 3402
-h = 3108
+input_name = sys.argv[1]
+num_parts = int(sys.argv[2])
+extension_pos = input_name.rfind('.')  # Find the last '.' in the input image name
 
 x = 0
 y = 0
 
-input_name = sys.argv[1]
-extension_pos = input_name.rfind('.')  # Find the last '.' in the input image name
+h = int(subprocess.check_output(f'magick identify -format "%[fx:h]" "{input_name}"', shell=True))
+w = int(subprocess.check_output(f'magick identify -format "%[fx:w]" "{input_name}"', shell=True))
+w = math.floor(w/num_parts)
 
 for ind in range(num_parts):
   output_name = input_name[0:extension_pos] + f'_{ind}' + input_name[extension_pos:len(input_name)]  # Add number to output file name
